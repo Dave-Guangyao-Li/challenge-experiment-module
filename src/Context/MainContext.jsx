@@ -18,10 +18,15 @@ export const MainProvider = ({ children }) => {
 
   // connect to metamask
   const connectMetamaskWithAccount = async () => {
-    const { provider } = await connectMetamask();
-    const accounts = await provider.send("eth_requestAccounts", []);
-    setAccount(accounts[0]);
-    window.location.reload();
+    try {
+      const { provider } = await connectMetamask();
+      const accounts = await provider.send("eth_requestAccounts", []);
+      setAccount(accounts[0]);
+      window.location.reload();
+    } catch (error) {
+      // Error is already handled in connectMetamask function
+      console.error("Error connecting wallet:", error);
+    }
   };
 
   // check if wallet is connect
@@ -38,8 +43,7 @@ export const MainProvider = ({ children }) => {
         getCampaignsDetail,
         getCampaignDetail,
         getUserCampaigns,
-      }}
-    >
+      }}>
       {children}
     </MainContext.Provider>
   );
